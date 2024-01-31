@@ -1,0 +1,63 @@
+data	;											
+												
+set 	RESC	:=	leg	rod36	rod30	rod24	rod18	mesh	fleece	sewing	casing	;
+set 	PROD 	:=	m36_30	m30_24	m24_18	f36_30	f30_24	f24_18	;			
+												
+param:	sell_p	quota	demand	:=		#selling price, maximum demand and quota per product						
+m36_30	30	     1		12				#quota is a soft constraint to ensure a variety of samples					
+m30_24	40	     1		12									
+m24_18	50	     1		12									
+f36_30	35	     1		12									
+f30_24	45	     1		12									
+f24_18	55	     1		12	;								
+												
+param:	supply	scrap_cost	:=		#amount of total supply and scrap cost per resource							
+leg	    85			0										
+rod36	21			0										
+rod30	17			0										
+rod24	19			0										
+rod18	23			0										
+mesh	288			0										
+fleece	360			-0.14										
+sewing	720			0										
+casing	720			0	;									
+												
+param   big_M := 400;		#big_M value decided by finding the optimal value without constraint.						
+												
+param: BOR:	    usage:=		#amount of each resource used per product								
+m36_30 leg	    4											
+m36_30 rod36	2											
+m36_30 rod30	2											
+m36_30 mesh	    36											
+m36_30 sewing	5											
+m36_30 casing	132											
+m30_24 leg	    4											
+m30_24 rod30	2											
+m30_24 rod24	2											
+m30_24 mesh	    24											
+m30_24 sewing	5											
+m30_24 casing	108											
+m24_18 leg	    4											
+m24_18 rod24	2											
+m24_18 rod18	2											
+m24_18 mesh	    18											
+m24_18 sewing	5											
+m24_18 casing	84											
+f36_30 leg	    4											
+f36_30 rod36	2											
+f36_30 rod30	2											
+f36_30 fleece	36											
+f36_30 sewing	30											
+f36_30 casing	132											
+f30_24 leg	    4											
+f30_24 rod30	2											
+f30_24 rod24	2											
+f30_24 fleece	24											
+f30_24 sewing	20											
+f30_24 casing	108											
+f24_18 leg	    4											
+f24_18 rod24	2											
+f24_18 rod18	2											
+f24_18 fleece	18											
+f24_18 sewing	10											
+f24_18 casing	84	;										
