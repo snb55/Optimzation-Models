@@ -1,0 +1,98 @@
+# data for substitution dogbed problem
+data;
+set PROD := LargeMesh MediumMesh SmallMesh LargeFleece MediumFleece SmallFleece; # set of products
+      		
+set RESOURCE := Mesh Fleece P_Legs R_Legs Casing 36Rods 30Rods 24Rods 18Rods Loops Time   ; 
+# set of resources
+
+param: BOM: usage :=  #list for BOM
+#product, resource,		usage rate
+LargeMesh Mesh 			36 
+LargeMesh P_Legs 		4
+LargeMesh 36Rods 		2 
+LargeMesh 30Rods 		2 
+LargeMesh Loops			22
+LargeMesh Time 			5
+
+MediumMesh Mesh 		24 
+MediumMesh P_Legs 		4
+MediumMesh 24Rods 		2 
+MediumMesh 30Rods 		2 
+MediumMesh Loops 		18
+MediumMesh Time 		5
+
+SmallMesh Mesh 			18 
+SmallMesh P_Legs 		4
+SmallMesh 24Rods 		2 
+SmallMesh 18Rods 		2	 
+SmallMesh Loops 		14
+SmallMesh Time 			5
+
+LargeFleece Fleece 		36 
+LargeFleece P_Legs 		4
+LargeFleece 36Rods 		2 
+LargeFleece 30Rods 		2 
+LargeFleece Casing 		132
+LargeFleece Time 		30
+
+MediumFleece Fleece 	24 
+MediumFleece P_Legs 	4
+MediumFleece 24Rods 	2 
+MediumFleece 30Rods 	2 
+MediumFleece Casing 	108
+MediumFleece Time 		20 
+
+SmallFleece Fleece 	18 
+SmallFleece P_Legs 	4
+SmallFleece 24Rods 	2 
+SmallFleece 18Rods 	2 
+SmallFleece Casing 	84
+SmallFleece Time 	10
+;
+
+param:	SUBS: 	sub_usage 				sub_pen :=		#set of substitutions
+#product,	prefrred resource,	substitute avaialble,	usage rate of substitute,	penalty for substitution
+SmallFleece 	P_Legs 			R_Legs 					4 							1 
+MediumFleece 	P_Legs 			R_Legs 					4  							1
+LargeFleece 	P_Legs 			R_Legs 					4   						1
+SmallMesh 		P_Legs 			R_Legs 					4   						1
+MediumMesh 		P_Legs 			R_Legs 					4   						1
+LargeMesh 		P_Legs 			R_Legs 					4   						1
+
+SmallMesh 		Loops  			Casing 					132 						0
+MediumMesh 		Loops  			Casing 					108 						0
+LargeMesh 		Loops  			Casing 					84  						0;
+
+param:				price	demand lower_bd:=					
+    #product 		price, demand, lower demand
+	LargeMesh		40		12		1
+	MediumMesh		30		12		1
+	SmallMesh		20		12		1
+	LargeFleece		50		12		1
+	MediumFleece 	40		12		1
+	SmallFleece		30		12		1;
+
+param:	supply  scrap_pen:=									
+#resource supply, scrap penalty
+Mesh 			288		0
+Fleece			360		-.13888888
+Casing			720		0
+R_Legs			54		0
+P_Legs			85 		0
+36Rods			21		0
+30Rods			17		0
+24Rods			19    	0
+18Rods 			23		0 				
+Time			720		0
+Loops			125		0;
+;
+
+
+
+
+
+
+
+ 
+
+

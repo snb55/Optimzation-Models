@@ -1,0 +1,137 @@
+# TINY test problem for subs
+data;
+set PROD := LargeMesh MediumMesh SmallMesh LargeFleece MediumFleece SmallFleece; # set of products
+set RESOURCE := Mesh Fleece Legs RubberLegs Casing 36Rods 30Rods 24Rods 18Rods Loops Sewing Serger  ;      # set of ingredients
+set TIME := Tuesday,Wednesday,Thursday,Friday; # set of time periods
+set MATERIAL:= Mesh Fleece Legs RubberLegs Casing 36Rods 30Rods 24Rods 18Rods Loops; #set of materials (can be transferred to the next day)
+set CAPACITY:= Sewing Serger; # set of capacity (must be used on that day)
+
+param: BOM: usage :=  #list for BOM  USUAL INPUT FORMAT FROM MRP SYSTEM
+LargeMesh, Mesh 		36 
+LargeMesh, Legs 		4
+LargeMesh, 36Rods 		2 
+LargeMesh, 30Rods 		2 
+LargeMesh, Casing 		132
+LargeMesh, Sewing 		7
+
+MediumMesh, Mesh 		24 
+MediumMesh, Legs 		4
+MediumMesh, 24Rods 		2 
+MediumMesh, 30Rods 		2 
+MediumMesh, Casing 		108
+MediumMesh, Sewing 		5
+
+SmallMesh, Mesh 		18
+SmallMesh, Legs 		4
+SmallMesh, 24Rods 		2 
+SmallMesh, 18Rods 		2	 
+SmallMesh, Casing 		84
+SmallMesh, Sewing 		3
+
+LargeFleece, Fleece 	36 
+LargeFleece, Legs 		4
+LargeFleece, 36Rods 	2 
+LargeFleece, 30Rods 	2 
+LargeFleece, Casing 	132
+LargeFleece, Sewing 	30
+
+MediumFleece, Fleece 	24 
+MediumFleece, Legs 		4
+MediumFleece, 24Rods 	2 
+MediumFleece, 30Rods 	2 
+MediumFleece, Casing 	108
+MediumFleece, Sewing 	20 
+
+SmallFleece, Fleece 	18 
+SmallFleece, Legs 		4
+SmallFleece, 24Rods 	2 
+SmallFleece, 18Rods 	2 
+SmallFleece, Casing 	84
+SmallFleece, Sewing 	10;
+
+param:				price:=	#product price
+	LargeMesh		40		
+	MediumMesh		30	
+	SmallMesh		20		
+	LargeFleece		50	
+	MediumFleece 	40
+	SmallFleece		30;	
+
+param:							demand  lower_bd :=		#product demand, lower bound demand
+	LargeMesh	Tuesday			0		0
+	MediumMesh	Tuesday			0		0
+	SmallMesh	Tuesday			0		0
+	LargeFleece	Tuesday			0		0
+	MediumFleece Tuesday		0		0
+	SmallFleece	Tuesday			0		0
+	
+	LargeMesh	Wednesday		100		3
+	MediumMesh	Wednesday		100		3
+	SmallMesh	Wednesday		10		3
+	LargeFleece	Wednesday		100		3
+	MediumFleece Wednesday		100		3
+	SmallFleece	Wednesday		100		3	
+	
+	LargeMesh	Thursday		0		0
+	MediumMesh	Thursday		0		0
+	SmallMesh	Thursday		0		0
+	LargeFleece	Thursday		0		0
+	MediumFleece Thursday		0		0
+	SmallFleece	Thursday		0		0
+	
+	LargeMesh	Friday			10		3
+	MediumMesh	Friday			100		3
+	SmallMesh	Friday			100		3
+	LargeFleece	Friday			100		3
+	MediumFleece Friday			100		3
+	SmallFleece	Friday			100		3;
+
+param:  scrap_pen:= #ingredient scrap penalty
+Fleece	-.13888888;	
+	
+param:				supply  :=		#ingredient supply
+Mesh 	    Tuesday		3600		
+Fleece		Tuesday		1440	
+Casing		Tuesday		2160    
+Legs		Tuesday		33 		
+36Rods		Tuesday		7		
+30Rods		Tuesday		1	
+24Rods		Tuesday		7      
+18Rods 		Tuesday		13						
+Sewing		Tuesday		120	
+Serger		Tuesday		60		
+Loops		Tuesday		1000	
+
+Casing		Wednesday	1800    
+Legs		Wednesday	300 	
+36Rods		Wednesday	75		
+30Rods		Wednesday	150		
+24Rods		Wednesday	150     
+18Rods 		Wednesday	75						
+Sewing 		Wednesday	120		
+Serger		Wednesday	60		
+
+Fleece		Thursday	1440	
+Sewing 		Thursday	120		
+Serger		Thursday	60		
+
+Sewing 		Friday		120		
+Serger		Friday		60		
+;
+
+param: SUB_TRIPLES: sub_usage :=  #Define the set SUB_TRIPLES as the list is processed
+LargeMesh, Casing, Loops 	22
+MediumMesh, Casing, Loops 	18 
+SmallMesh Casing Loops , 	14 
+
+LargeMesh, Legs, RubberLegs 	4
+MediumMesh, Legs, RubberLegs	4
+SmallMesh, Legs, RubberLegs 	4
+LargeFleece, Legs, RubberLegs 	4
+MediumFleece, Legs, RubberLegs 	4
+SmallFleece, Legs, RubberLegs 	4
+
+LargeFleece, Sewing, Serger 	15
+MediumFleece, Sewing,Serger 	10
+SmallFleece, Sewing, Serger 	5
+;

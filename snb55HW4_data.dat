@@ -1,0 +1,175 @@
+
+data;
+
+set RAW := 18PlasticRod 24PlasticRod 30PlasticRod 30MetalRod 36PlasticRod 36MetalRod PlasticLegs 
+RubberLegs MetalLegs Fleece Mesh Casing Loops;    # set of raw materials
+set CAPACITY:= Sew Serge ;			#set of capacities
+set PROD:= LargeMetalFleece LargePlasticFleece LargeMetalMesh LargePlasticMesh  MediumFleece MediumMesh 
+SmallFleece SmallMesh LargeFleeceTop MediumFleeceTop SmallFleeceTop LargeMeshTop MediumMeshTop SmallMeshTop;
+set ENDPROD:= LargeMetalFleece LargePlasticFleece LargeMetalMesh LargePlasticMesh  MediumFleece MediumMesh 
+SmallFleece SmallMesh;
+
+
+set TIME := Feb22 Feb23 Feb24 Feb25 Feb26 Feb27 Feb28; 
+
+param: BOM: usage :=  	# usage data given as list of Prod, resource qty
+						# BOM is defined through this list
+#end products BOM
+LargeMetalFleece, Fleece 			36  
+LargeMetalFleece, MetalLegs 		4
+LargeMetalFleece, 36MetalRod 		2 
+LargeMetalFleece, 30MetalRod 		2 
+LargeMetalFleece, Casing 			132
+LargeMetalFleece, Serge 			15
+						
+LargeMetalMesh, Mesh 				36 
+LargeMetalMesh, MetalLegs 			4
+LargeMetalMesh, 36MetalRod 			2 
+LargeMetalMesh, 30MetalRod 			2 
+LargeMetalMesh, Casing 				132
+LargeMetalMesh, Sew 			7
+
+LargePlasticFleece, LargeFleeceTop 	1
+LargePlasticFleece, PlasticLegs     4
+
+LargePlasticMesh, LargeMeshTop 		1
+LargePlasticMesh, PlasticLegs     	4 
+
+MediumFleece, MediumFleeceTop 		1
+MediumFleece, PlasticLegs     		4 
+
+MediumMesh, MediumMeshTop 			1
+MediumMesh, PlasticLegs     		4 
+
+SmallFleece, SmallFleeceTop 		1
+SmallFleece, PlasticLegs     		4 
+
+SmallMesh, SmallMeshTop 			1
+SmallMesh, PlasticLegs     			4 
+
+#sub assemblies
+LargeFleeceTop, Fleece 				36  
+LargeFleeceTop, 36PlasticRod 		2 
+LargeFleeceTop, 30PlasticRod 		2 
+LargeFleeceTop, Casing 				132
+LargeFleeceTop, Serge 				15
+
+LargeMeshTop, Mesh 					36 
+LargeMeshTop, 36PlasticRod 			2 
+LargeMeshTop, 30PlasticRod 			2 
+LargeMeshTop, Casing 				132
+LargeMeshTop, Sew 					7
+
+MediumFleeceTop, Fleece 			24 
+MediumFleeceTop, 24PlasticRod 		2 
+MediumFleeceTop, 30PlasticRod 		2 
+MediumFleeceTop, Casing 			108
+MediumFleeceTop, Serge				10 	
+
+MediumMeshTop, Mesh 				24 
+MediumMeshTop, 24PlasticRod 		2 
+MediumMeshTop, 30PlasticRod 		2 
+MediumMeshTop, Casing 				108
+MediumMeshTop, Sew					5
+
+SmallFleeceTop, Fleece 				18 
+SmallFleeceTop, 24PlasticRod 		2	 
+SmallFleeceTop, 18PlasticRod 		2 
+SmallFleeceTop, Casing 				84
+SmallFleeceTop, Serge				5
+
+SmallMeshTop, Mesh 					18
+SmallMeshTop, 24PlasticRod 			2 
+SmallMeshTop, 18PlasticRod 			2	 
+SmallMeshTop, Casing 				84
+SmallMeshTop, Sew 					3
+;	
+
+param p_disc := .02; #(from previous model solution)
+param alpha := .05;  #computed from data to disincentive substitutions
+param			baseprice			:=			#product price
+	LargeMetalFleece	75	
+	LargePlasticFleece	50	
+	LargePlasticMesh	40	
+	LargeMetalMesh		60	
+	MediumFleece		40	
+	MediumMesh			30	
+	SmallFleece			30	
+	SmallMesh			20	
+#Below are suggested base prices for materials		
+	LargeFleeceTop	40	
+	MediumFleeceTop	30	
+	SmallFleeceTop	20	
+	18PlasticRod	1	
+	24PlasticRod	1	
+	30PlasticRod	1	
+	30MetalRod		2	
+	36PlasticRod	1	
+	36MetalRod		2	
+	PlasticLegs	1	
+	MetalLegs		2	
+	Loops			0.05		
+	;
+param	demand:		Feb22 Feb23 Feb24 Feb25 Feb26 Feb27 Feb28 :=		#product  demand
+	LargeMetalFleece		6	2	2	2	4	1	6
+	LargePlasticFleece		6	4	2	2	2	4	4
+	LargePlasticMesh		3	2	4	2	2	3	5
+	LargeMetalMesh			3	2	2	2	2	4	4
+	MediumFleece			3	2	2	2	2	3	3
+	MediumMesh				3	2	2	4	2	4	4
+	SmallFleece				3	2	2	2	6	2	5
+	SmallMesh				3	2	6	2	2	4	2
+	LargeFleeceTop			5	0	0	0	0 	3	0
+	MediumFleeceTop			4	0 	0	0	0	3	0
+	SmallFleeceTop			3	0 	0	0	0 	4	0
+	18PlasticRod			12	0 	0	0	0	2	0
+	24PlasticRod			12	0 	0	0	0	3	0
+	30PlasticRod			12	0 	0	0	0	4	0
+	30MetalRod				12	0 	0	0	0	5	0
+	36PlasticRod			12	0 	0	0	0	2	0
+	36MetalRod				12	0 	0	0	0	2	0
+	PlasticLegs				24	0 	0	0	0	6	0
+	MetalLegs				10	0 	0	0	0	1	0
+	Loops					60	0 	0	0	0	10	0
+;	
+
+	
+param	 scrap_pen :=			# scrap penalty
+Fleece	-.13888888;
+
+param supply: Feb22 Feb23 Feb24 Feb25 Feb26 Feb27 Feb28 :=		#resource supply
+18PlasticRod		10	25	0	25	0	25	0
+24PlasticRod		12	25	25	25	25	0	0
+30PlasticRod		7	25	25	0	0	50	0
+30MetalRod			6	10	0	20	0	20	0
+36PlasticRod		8	25	25	0	0	50	50
+36MetalRod			12	0	10	20	0	0	0
+PlasticLegs			60	0	100	0	100	100	0
+RubberLegs			20	0	0	0	0	0	0
+MetalLegs			32	0	0	0	40	0	0
+Fleece				2880	0	1440	0	0	0	0
+Mesh				1440	0	0	0	0	3600	0
+Casing				7200	3600	3600	3600	3600	3600	3600
+Sew					180	180	0	180	180	0	240
+Serge				120	0	120	120	120	0	240
+Loops				500	0	0	0	0	0	0
+#left over from friday
+MediumMeshTop		3	0	0	0	0	0	0
+;	
+		
+param: SUB_TRIPLES: sub_usage penalty:=   # defines SUB_TRIPLES as list.
+LargeMeshTop, Casing, Loops 	22	-1
+MediumMeshTop, Casing, Loops 	18 -1
+SmallMeshTop, Casing, Loops  	14 -1
+
+LargeFleeceTop, Serge, Sew 		30 0
+MediumFleeceTop, Serge, Sew 	20 0
+SmallFleeceTop, Serge, Sew  	10 0
+
+LargePlasticMesh PlasticLegs RubberLegs 	4 1
+MediumMesh PlasticLegs RubberLegs 	4 1
+SmallMesh PlasticLegs RubberLegs 	4 1
+LargePlasticFleece PlasticLegs RubberLegs 	4 1
+MediumFleece PlasticLegs RubberLegs	4 1
+SmallFleece PlasticLegs RubberLegs 	4 1
+
